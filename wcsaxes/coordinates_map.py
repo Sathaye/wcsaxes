@@ -9,7 +9,7 @@ from . import six
 class CoordinatesMap(object):
 
     def __init__(self, axes, wcs, transform=None):
-
+        
         # Keep track of parent axes and WCS
         self._axes = axes
         self._wcs = wcs
@@ -42,21 +42,26 @@ class CoordinatesMap(object):
         # Set up default labels if possible
 
     def __getitem__(self, item):
+        
         if isinstance(item, six.string_types):
             return self._coords[item.lower()]
         else:
             return self._coords[item]
 
     def set_visible(self, visibility):
+        
         raise NotImplementedError()
 
     def enable_offset_mode(self, reference_coordinates):
+        
         raise NotImplementedError()
 
     def disable_offset_mode(self):
+        
         raise NotImplementedError()
 
     def grid(self, draw_grid=True, **kwargs):
+        
         """
         Plot gridlines for both coordinates.
 

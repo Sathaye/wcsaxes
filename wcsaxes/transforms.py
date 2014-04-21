@@ -23,6 +23,7 @@ class CurvedTransform(Transform):
     is_separable = False
 
     def transform_path(self, path):
+        
         """
         Transform a Matplotlib Path
 
@@ -42,10 +43,12 @@ class CurvedTransform(Transform):
 
     @abc.abstractmethod
     def transform(self, input):
+        
         raise NotImplemented("")
 
     @abc.abstractmethod
     def inverted(self):
+        "CurvedTransform inverted"
         raise NotImplemented("")
 
 
@@ -56,10 +59,12 @@ class WCSWorld2PixelTransform(CurvedTransform):
     """
 
     def __init__(self, wcs):
+        
         super(WCSWorld2PixelTransform, self).__init__()
         self.wcs = wcs
 
     def transform(self, world):
+        
         """
         Transform world to pixel coordinates
         """
@@ -69,12 +74,12 @@ class WCSWorld2PixelTransform(CurvedTransform):
         xp, yp = self.wcs.wcs_world2pix(xw, yw, 1)
         xp, yp = xp - 1, yp - 1
         pixel = np.concatenate((xp[:, np.newaxis], yp[:, np.newaxis]), 1)
-
         return pixel
 
     transform_non_affine = transform
 
     def inverted(self):
+        
         """
         Return the inverse of the transform
         """
@@ -88,10 +93,12 @@ class WCSPixel2WorldTransform(CurvedTransform):
     """
 
     def __init__(self, wcs):
+        
         super(WCSPixel2WorldTransform, self).__init__()
         self.wcs = wcs
 
     def transform(self, pixel):
+        
         """
         Transform pixel to world coordinates
         """
@@ -116,6 +123,7 @@ class WCSPixel2WorldTransform(CurvedTransform):
     transform_non_affine = transform
 
     def inverted(self):
+        
         """
         Return the inverse of the transform
         """
@@ -125,11 +133,13 @@ class WCSPixel2WorldTransform(CurvedTransform):
 class CoordinateTransform(CurvedTransform):
 
     def __init__(self, input_system, output_system):
+        
         super(CoordinateTransform, self).__init__()
         self.input_system = input_system
         self.output_system = output_system
 
     def transform(self, input_coords):
+        
         """
         Transform one set of coordinates to another
         """
@@ -145,6 +155,7 @@ class CoordinateTransform(CurvedTransform):
     transform_non_affine = transform
 
     def inverted(self):
+        
         """
         Return the inverse of the transform
         """

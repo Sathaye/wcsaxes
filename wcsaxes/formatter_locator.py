@@ -26,7 +26,7 @@ class BaseFormatterLocator(object):
     """
 
     def __init__(self, values=None, number=None, spacing=None, format=None):
-
+        
         if (values, number, spacing).count(None) < 2:
             raise ValueError("At most one of values/number/spacing can be specifed")
 
@@ -38,35 +38,41 @@ class BaseFormatterLocator(object):
             self.spacing = spacing
         else:
             self.number = 5
-
+        
         self.format = format
 
     @property
     def values(self):
+        
         return self._values
 
     @values.setter
     def values(self, values):
-        self._number = None
+        
+        self._number = Nones
         self._spacing = None
         self._values = values
 
     @property
     def number(self):
+        
         return self._number
 
     @number.setter
     def number(self, number):
+        
         self._number = number
         self._spacing = None
         self._values = None
 
     @property
     def spacing(self):
+        
         return self._spacing
 
     @spacing.setter
     def spacing(self, spacing):
+        
         self._number = None
         self._spacing = spacing
         self._values = None
@@ -78,6 +84,7 @@ class AngleFormatterLocator(BaseFormatterLocator):
     """
 
     def __init__(self, values=None, number=None, spacing=None, format=None):
+        
         self._unit = u.degree
         super(AngleFormatterLocator, self).__init__(values=values,
                                                     number=number,
@@ -86,10 +93,12 @@ class AngleFormatterLocator(BaseFormatterLocator):
 
     @property
     def spacing(self):
+        
         return self._spacing
 
     @spacing.setter
     def spacing(self, spacing):
+        
         if spacing is not None and (not isinstance(spacing, u.Quantity)
                                     or spacing.unit.physical_type != 'angle'):
             raise TypeError("spacing should be an astropy.units.Quantity instance with units of angle")
@@ -99,11 +108,12 @@ class AngleFormatterLocator(BaseFormatterLocator):
 
     @property
     def format(self):
+        
         return self._format
 
     @format.setter
     def format(self, value):
-
+        
         self._format = value
 
         if value is None:
@@ -148,6 +158,7 @@ class AngleFormatterLocator(BaseFormatterLocator):
 
     @property
     def base_spacing(self):
+        
 
         if self._decimal:
 
@@ -171,7 +182,7 @@ class AngleFormatterLocator(BaseFormatterLocator):
         return spacing
 
     def locator(self, value_min, value_max):
-
+        
         if self.values is not None:
 
             # values were manually specified
@@ -213,7 +224,6 @@ class AngleFormatterLocator(BaseFormatterLocator):
             return values, spacing_deg * u.degree
 
     def formatter(self, values, spacing):
-
         if len(values) > 0:
 
             if self.format is None:
@@ -236,7 +246,6 @@ class AngleFormatterLocator(BaseFormatterLocator):
                 precision = self._precision
                 decimal = self._decimal
                 unit = self._unit
-
             angles = Angle(np.asarray(values), unit=u.deg)
             string = angles.to_string(unit=unit,
                                       precision=precision,
@@ -253,6 +262,7 @@ class ScalarFormatterLocator(BaseFormatterLocator):
     """
 
     def __init__(self, values=None, number=None, spacing=None, format=None):
+        
         super(ScalarFormatterLocator, self).__init__(values=values,
                                                      number=number,
                                                      spacing=spacing,
@@ -260,11 +270,12 @@ class ScalarFormatterLocator(BaseFormatterLocator):
 
     @property
     def format(self):
+        
         return self._format
 
     @format.setter
     def format(self, value):
-
+        
         self._format = value
 
         if value is None:
@@ -288,10 +299,11 @@ class ScalarFormatterLocator(BaseFormatterLocator):
 
     @property
     def base_spacing(self):
+        
         return 1. / (10. ** self._precision)
 
     def locator(self, value_min, value_max):
-
+        
         if self.values is not None:
 
             # values were manually specified
@@ -327,7 +339,7 @@ class ScalarFormatterLocator(BaseFormatterLocator):
             return values, spacing
 
     def formatter(self, values, spacing):
-
+        
         if len(values) > 0:
 
             if self.format is None:

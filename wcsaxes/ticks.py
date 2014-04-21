@@ -15,7 +15,9 @@ class Ticks(Line2D):
     set_tick_out(False).
     """
 
+
     def __init__(self, ticksize=5., tick_out=False, **kwargs):
+        
         self.set_ticksize(ticksize)
         self.set_tick_out(tick_out)
         self.clear()
@@ -24,45 +26,53 @@ class Ticks(Line2D):
         self.set_visible_axes('all')
 
     def set_tick_out(self, tick_out):
+        
         """
         set True if tick need to be rotated by 180 degree.
         """
         self._tick_out = tick_out
 
     def get_tick_out(self):
+        
         """
         Return True if the tick will be rotated by 180 degree.
         """
         return self._tick_out
 
     def set_ticksize(self, ticksize):
+        
         """
         set length of the ticks in points.
         """
         self._ticksize = ticksize
 
     def get_ticksize(self):
+        
         """
         Return length of the ticks in points.
         """
         return self._ticksize
 
     def set_visible_axes(self, visible_axes):
+        
         self._visible_axes = visible_axes
 
     def get_visible_axes(self):
+        
         if self._visible_axes == 'all':
             return self.world.keys()
         else:
             return [x for x in self._visible_axes if x in self.world]
 
     def clear(self):
+        
         self.world = {}
         self.pixel = {}
         self.angle = {}
         self.disp = {}
 
     def add(self, axis, world, pixel, angle, axis_displacement):
+        
         if axis not in self.world:
             self.world[axis] = [world]
             self.pixel[axis] = [pixel]
@@ -75,11 +85,13 @@ class Ticks(Line2D):
             self.disp[axis].append(axis_displacement)
 
     def __len__(self):
+        
         return len(self.world)
 
     _tickvert_path = Path([[0., 0.], [1., 0.]])
 
     def draw(self, renderer):
+        
         """
         Draw the ticks.
         """

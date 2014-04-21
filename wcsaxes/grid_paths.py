@@ -12,6 +12,7 @@ DISCONT_FACTOR = 10.
 
 
 def get_lon_lat_path(ax, transform, lon_lat):
+    
     """
     Draw a curve, taking into account discontinuities.
 
@@ -97,6 +98,7 @@ def get_lon_lat_path(ax, transform, lon_lat):
 
 
 def get_gridline_path(ax, transform, world):
+    
     """
     Draw a grid line
 

@@ -9,8 +9,9 @@ def select_axes(iterable, dimensions):
 
 class WCSParameters(object):
 
-    def __init__(self, wcs, dimensions):
 
+    def __init__(self, wcs, dimensions):
+        
         self.ctype = select_axes(wcs.ctype, dimensions)
         self.crval = select_axes(wcs.crval, dimensions)
         self.crpix = select_axes(wcs.crpix, dimensions)
@@ -26,7 +27,7 @@ class WCSSlice(object):
     # 2-dimensional WCS object.
 
     def __init__(self, *args, **kwargs):
-
+        
         if 'slices' in kwargs:
             self._slices = kwargs.pop('slices')
 
@@ -64,6 +65,7 @@ class WCSSlice(object):
         self.wcs = WCSParameters(self._wcs_orig.wcs, self._dimensions)
 
     def wcs_world2pix(self, x, y, origin):
+        
         if self._wcs_orig.naxis == 2:
             if self._dimensions[1] < self._dimensions[0]:
                 xp, yp = self._wcs_orig.wcs_world2pix(y, x, origin)
@@ -94,6 +96,7 @@ class WCSSlice(object):
             return result[:, self._dimensions[0]], result[:, self._dimensions[1]]
 
     def wcs_pix2world(self, x, y, origin):
+        
         if self._wcs_orig.naxis == 2:
             if self._dimensions[1] < self._dimensions[0]:
                 xw, yw = self._wcs_orig.wcs_pix2world(y, x, origin)

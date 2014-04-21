@@ -8,6 +8,7 @@ from matplotlib.lines import Line2D, Path
 class Spine(object):
 
     def __init__(self, parent_axes, transform):
+        
 
         self.parent_axes = parent_axes
         self.transform = transform
@@ -18,10 +19,12 @@ class Spine(object):
 
     @property
     def data(self):
+        
         return self._data
 
     @data.setter
     def data(self, value):
+        
         if value is None:
             self._data = None
             self._pixel = None
@@ -34,10 +37,12 @@ class Spine(object):
 
     @property
     def pixel(self):
+        
         return self._pixel
 
     @pixel.setter
     def pixel(self, value):
+        
         if value is None:
             self._data = None
             self._pixel = None
@@ -50,10 +55,12 @@ class Spine(object):
 
     @property
     def world(self):
+        
         return self._world
 
     @world.setter
     def world(self, value):
+        
         if value is None:
             self._data = None
             self._pixel = None
@@ -65,6 +72,7 @@ class Spine(object):
             self._update_normal()
 
     def _update_normal(self):
+        
         # Find angle normal to border and inwards, in display coordinate
         dx = self.pixel[1:,0] - self.pixel[:-1,0]
         dy = self.pixel[1:,1] - self.pixel[:-1,1]
@@ -74,7 +82,7 @@ class Spine(object):
 class RectangularFrame(OrderedDict):
 
     def __init__(self, parent_axes, transform):
-
+        
         super(RectangularFrame, self).__init__()
 
         self.parent_axes = parent_axes
@@ -85,16 +93,18 @@ class RectangularFrame(OrderedDict):
 
     @property
     def transform(self):
+        
         return self._transform
 
     @transform.setter
     def transform(self, value):
+        
         self._transform = value
         for axis in self:
             self[axis].transform = value
 
     def update(self):
-
+        
         xmin, xmax = self.parent_axes.get_xlim()
         ymin, ymax = self.parent_axes.get_ylim()
 
@@ -104,7 +114,7 @@ class RectangularFrame(OrderedDict):
         self['l'].data = np.array(([xmin, xmin], [ymax, ymin])).transpose()
 
     def sample(self, n_samples):
-
+        
         self.update()
 
         spines = OrderedDict()
@@ -121,6 +131,7 @@ class RectangularFrame(OrderedDict):
 
     @property
     def path(self):
+        
         x, y = [], []
         for axis in self:
             x.append(self[axis].pixel[:,0])
@@ -128,6 +139,7 @@ class RectangularFrame(OrderedDict):
         return Path(np.vstack([np.hstack(x), np.hstack(y)]).transpose())
 
     def draw(self, renderer):
+        
         for axis in self:
             x, y = self[axis].pixel[:,0], self[axis].pixel[:,1]
             line = Line2D(x, y, color='black', zorder=1000)

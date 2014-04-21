@@ -24,7 +24,7 @@ class CoordinateHelper(object):
 
     def __init__(self, parent_axes=None, transform=None, coord_index=None,
                  coord_type='scalar', frame=None):
-
+        
         # Keep a reference to the parent axes and the transform
         self.parent_axes = parent_axes
         self.transform = transform
@@ -48,12 +48,13 @@ class CoordinateHelper(object):
         # Initialize tick labels
         self.ticklabels = TickLabels(transform=None,  # display coordinates
                                      figure=parent_axes.get_figure())
+        
 
         # Initialize axis labels
         self.axislabels = AxisLabels(self.frame,
                                      transform=None,  # display coordinates
                                      figure=parent_axes.get_figure())
-
+        
         # Initialize container for the grid lines
         self.grid_lines = []
         self.grid_lines_kwargs = {'visible':False,
@@ -61,6 +62,7 @@ class CoordinateHelper(object):
                                   'transform':self.parent_axes.transData}
 
     def grid(self, draw_grid=True, **kwargs):
+        
         """
         Plot grid lines for this coordinate.
 
@@ -85,6 +87,7 @@ class CoordinateHelper(object):
             self.grid_lines_kwargs['visible'] = True
 
     def set_major_formatter(self, formatter):
+        
         """
         Set the formatter to use for the major tick labels.
 
@@ -103,6 +106,7 @@ class CoordinateHelper(object):
 
     def set_ticks(self, values=None, spacing=None, number=None, size=None,
                   color=None, alpha=None):
+        
         """
         Set the location and properties of the ticks.
 
@@ -144,6 +148,7 @@ class CoordinateHelper(object):
             self.ticks.set_alpha(alpha)
 
     def set_ticks_position(self, position):
+        
         """
         Set where ticks should appear
 
@@ -158,6 +163,7 @@ class CoordinateHelper(object):
         self.ticks.set_visible_axes(position)
 
     def set_ticklabel(self, **kwargs):
+        
         """
         Set the visual properties for the tick labels.
 
@@ -171,6 +177,7 @@ class CoordinateHelper(object):
         self.ticklabels.set(**kwargs)
 
     def set_ticklabel_position(self, position):
+        
         """
         Set where tick labels should appear
 
@@ -185,6 +192,7 @@ class CoordinateHelper(object):
         self.ticklabels.set_visible_axes(position)
 
     def set_axislabel(self, text, **kwargs):
+        
         """
         Set the text and optionally visual properties for the axis label.
 
@@ -201,6 +209,7 @@ class CoordinateHelper(object):
         self.axislabels.set(**kwargs)
 
     def set_axislabel_position(self, position):
+        
         """
         Set where axis labels should appear
 
@@ -216,14 +225,16 @@ class CoordinateHelper(object):
 
     @property
     def locator(self):
+        
         return self._formatter_locator.locator
 
     @property
     def formatter(self):
+        
         return self._formatter_locator.formatter
 
     def _draw(self, renderer, bboxes):
-
+        
         renderer.open_group('coordinate_axis')
 
         self._update_ticks(renderer)

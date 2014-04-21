@@ -21,9 +21,8 @@ IDENTITY.wcs.cdelt = [1., 1.]
 class WCSAxes(Axes):
 
     def __init__(self, fig, rect, wcs=IDENTITY, **kwargs):
-
+        
         self.wcs = wcs
-
         super(WCSAxes, self).__init__(fig, rect, **kwargs)
 
         # Turn off spines and current axes
@@ -47,6 +46,7 @@ class WCSAxes(Axes):
         self.coords[1].set_ticklabel_position('l')
 
     def get_coord_range(self, transform):
+        
         xmin, xmax = self.get_xlim()
         ymin, ymax = self.get_ylim()
         return find_coordinate_range(transform.inverted(),
@@ -55,7 +55,7 @@ class WCSAxes(Axes):
                                      y_type=self.coords[1].coord_type)
 
     def draw(self, renderer, inframe=False):
-
+        
         super(WCSAxes, self).draw(renderer, inframe)
 
         # Here need to find out range of all coordinates, and update range for
@@ -77,7 +77,7 @@ class WCSAxes(Axes):
         self.coords.frame.draw(renderer)
 
     def get_coords_overlay(self, frame, equinox=None, obstime=None):
-
+        
         # Here we can't use get_transform because that deals with
         # pixel-to-pixel transformations when passing a WCS object.
         if isinstance(frame, WCS):
@@ -97,7 +97,7 @@ class WCSAxes(Axes):
         return coords
 
     def get_transform(self, frame, equinox=None, obstime=None):
-
+        
         if self.wcs is None and frame != 'pixel':
             raise ValueError('No WCS specified, so only pixel coordinates are available')
 
@@ -158,7 +158,7 @@ class WCSAxes(Axes):
                 raise NotImplemented("frame {0} not implemented".format(frame))
 
     def get_tightbbox(self, renderer):
-
+        
         if not self.get_visible():
             return
 
@@ -171,6 +171,7 @@ class WCSAxes(Axes):
             return []
 
     def grid(self, draw_grid=True, **kwargs):
+        
         """
         Plot gridlines for both coordinates.
 
@@ -182,5 +183,6 @@ class WCSAxes(Axes):
         draw_grid : bool
             Whether to show the gridlines
         """
+        
         if draw_grid:
             self.coords.grid(draw_grid=draw_grid, **kwargs)

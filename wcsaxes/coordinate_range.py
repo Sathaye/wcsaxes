@@ -4,12 +4,14 @@ import numpy as np
 
 
 def wrap_180(values):
+    
     values_new = values % 360.
     values_new[values_new > 180.] -= 360
     return values_new
 
 
 def find_coordinate_range(transform, extent, x_type='scalar', y_type='scalar'):
+    
     '''
     Find the range of coordinates to use for ticks/grids
 

@@ -5,6 +5,7 @@ from astropy import units as u
 
 
 def select_step_degree(dv):
+    
 
     # Modified from axis_artist, supports astropy.units
 
@@ -42,6 +43,7 @@ def select_step_degree(dv):
 
 
 def select_step_hour(dv):
+    
 
     if dv > 15. * u.arcsec:
 
@@ -77,6 +79,7 @@ def select_step_hour(dv):
 
 
 def select_step_scalar(dv):
+    
 
     log10_dv = np.log10(dv)
 
@@ -91,6 +94,7 @@ def select_step_scalar(dv):
 
 
 def get_coordinate_system(wcs):
+    
     """
     Given a WCS object for a pair of spherical coordinates, return the
     corresponding astropy coordinate class.
@@ -112,6 +116,7 @@ def get_coordinate_system(wcs):
 
 
 def coord_type_from_ctype(ctype):
+    
     """
     Determine whether a particular WCS ctype corresponds to an angle or scalar
     coordinate.

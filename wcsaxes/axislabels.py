@@ -10,7 +10,7 @@ class AxisLabels(Text):
         super(AxisLabels, self).__init__(*args, **kwargs)
         self.set_clip_on(True)
         self.set_visible_axes('all')
-        self.set_ha('center')
+        #self.set_ha('center')
         self.set_va('center')
 
     def set_visible_axes(self, visible_axes):

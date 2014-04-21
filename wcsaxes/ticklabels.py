@@ -10,12 +10,14 @@ def sort_using(X, Y):
 class TickLabels(Text):
 
     def __init__(self, *args, **kwargs):
+        
         self.clear()
         super(TickLabels, self).__init__(*args, **kwargs)
         self.set_clip_on(True)
         self.set_visible_axes('all')
 
     def clear(self):
+        
         self.world = {}
         self.pixel = {}
         self.angle = {}
@@ -23,6 +25,7 @@ class TickLabels(Text):
         self.disp = {}
 
     def add(self, axis, world, pixel, angle, text, axis_displacement):
+       
         if axis not in self.world:
             self.world[axis] = [world]
             self.pixel[axis] = [pixel]
@@ -37,6 +40,7 @@ class TickLabels(Text):
             self.disp[axis].append(axis_displacement)
 
     def sort(self):
+        
         """
         Sort by axis displacement, which allows us to figure out which parts
         of labels to not repeat.
@@ -49,6 +53,7 @@ class TickLabels(Text):
             self.disp[axis] = sort_using(self.disp[axis], self.disp[axis])
 
     def simplify_labels(self):
+        
         """
         Figure out which parts of labels can be dropped to avoid repetition.
         """
@@ -72,16 +77,18 @@ class TickLabels(Text):
                     self.text[axis][i] = self.text[axis][i][start:]
 
     def set_visible_axes(self, visible_axes):
+        
         self._visible_axes = visible_axes
 
     def get_visible_axes(self):
+        
         if self._visible_axes == 'all':
             return self.world.keys()
         else:
             return [x for x in self._visible_axes if x in self.world]
 
     def draw(self, renderer, bboxes):
-
+        
         self.simplify_labels()
 
         text_size = renderer.points_to_pixels(self.get_size())
@@ -93,7 +100,7 @@ class TickLabels(Text):
                 self.set_text(self.text[axis][i])
 
                 # TODO: do something smarter for arbitrary directions
-                if np.abs(self.angle[axis][i]) < 45.:
+                if np.abs(self.angle[axis][i]) < 45.: 
                     ha = 'right'
                     va = 'bottom'
                     dx = - text_size * 0.5
@@ -121,7 +128,6 @@ class TickLabels(Text):
                 self.set_va(va)
 
                 bb = super(TickLabels, self).get_window_extent(renderer)
-
                 if bb.count_overlaps(bboxes) == 0:
                     super(TickLabels, self).draw(renderer)
                     bboxes.append(bb)
