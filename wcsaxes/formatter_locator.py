@@ -13,10 +13,14 @@ import numpy as np
 from astropy import units as u
 from astropy.coordinates import Angle
 
+from . import six
+
 
 DMS_RE = re.compile('^dd(:mm(:ss(.(s)+)?)?)?$')
 HMS_RE = re.compile('^hh(:mm(:ss(.(s)+)?)?)?$')
 DDEC_RE = re.compile('^d(.(d)+)?$')
+DMIN_RE = re.compile('^m(.(m)+)?$')
+DSEC_RE = re.compile('^s(.(s)+)?$')
 SCAL_RE = re.compile('^x(.(x)+)?$')
 
 
@@ -145,6 +149,22 @@ class AngleFormatterLocator(BaseFormatterLocator):
                 self._precision = len(value) - value.index('.') - 1
             else:
                 self._precision = 0
+        elif DMIN_RE.match(value) is not None:
+            self._decimal = True
+            self._unit = u.arcmin
+            self._fields = 1
+            if '.' in value:
+                self._precision = len(value) - value.index('.') - 1
+            else:
+                self._precision = 0
+        elif DSEC_RE.match(value) is not None:
+            self._decimal = True
+            self._unit = u.arcsec
+            self._fields = 1
+            if '.' in value:
+                self._precision = len(value) - value.index('.') - 1
+            else:
+                self._precision = 0
         else:
             raise ValueError("Invalid format: {0}".format(value))
 
@@ -162,7 +182,7 @@ class AngleFormatterLocator(BaseFormatterLocator):
 
         if self._decimal:
 
-            spacing = u.degree / (10. ** self._precision)
+            spacing = self._unit / (10. ** self._precision)
 
         else:
 
@@ -246,11 +266,24 @@ class AngleFormatterLocator(BaseFormatterLocator):
                 precision = self._precision
                 decimal = self._decimal
                 unit = self._unit
+<<<<<<< HEAD
+=======
+
+            if decimal:
+                sep = None
+            else:
+                if unit == u.degree:
+                    sep=(six.u('\xb0'), "'", '"')[:fields]
+                else:
+                    sep=('h', 'm', 's')[:fields]
+
+>>>>>>> upstream/master
             angles = Angle(np.asarray(values), unit=u.deg)
             string = angles.to_string(unit=unit,
                                       precision=precision,
                                       decimal=decimal,
-                                      fields=fields).tolist()
+                                      fields=fields,
+                                      sep=sep).tolist()
             return string
         else:
             return []

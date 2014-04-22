@@ -69,7 +69,7 @@ class TickLabels(Text):
                 for j in range(len(t1)):
                     if t1[j] != t2[j]:
                         break
-                    if t1[j] not in '0123456789.':
+                    if t1[j] not in '-0123456789.':
                         start = j + 1
                 if start == 0:
                     t1 = self.text[axis][i]
@@ -128,6 +128,14 @@ class TickLabels(Text):
                 self.set_va(va)
 
                 bb = super(TickLabels, self).get_window_extent(renderer)
+<<<<<<< HEAD
+=======
+
+                # TODO: the problem here is that we might get rid of a label
+                # that has a key starting bit such as -0:30 where the -0
+                # might be dropped from all other labels.
+
+>>>>>>> upstream/master
                 if bb.count_overlaps(bboxes) == 0:
                     super(TickLabels, self).draw(renderer)
                     bboxes.append(bb)
