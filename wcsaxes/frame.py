@@ -32,7 +32,7 @@ class Spine(object):
         else:
             self._data = value
             self._pixel = self.parent_axes.transData.transform(self._data)
-            self._world = self.transform.inverted().transform(self._data)
+            self._world = self.transform.transform(self._data)
             self._update_normal()
 
     @property
@@ -50,7 +50,7 @@ class Spine(object):
         else:
             self._data = self.parent_axes.transData.inverted().transform(self._data)
             self._pixel = value
-            self._world = self.transform.inverted().transform(self._data)
+            self._world = self.transform.transform(self._data)
             self._update_normal()
 
     @property
@@ -92,6 +92,11 @@ class RectangularFrame(OrderedDict):
             self[axis] = Spine(parent_axes, transform)
 
     @property
+    def origin(self):
+        ymin, ymax = self.parent_axes.get_ylim()
+        return 'lower' if ymin < ymax else 'upper'
+
+    @property
     def transform(self):
         
         return self._transform
@@ -120,6 +125,7 @@ class RectangularFrame(OrderedDict):
         spines = OrderedDict()
 
         for axis in self:
+
             data = self[axis].data
             p = np.linspace(0., 1., data.shape[0])
             p_new = np.linspace(0., 1., n_samples)
