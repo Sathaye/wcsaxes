@@ -2,6 +2,8 @@ import numpy as np
 
 from matplotlib.text import Text
 
+from .frame import RectangularFrame
+
 
 def sort_using(X, Y):
     return [x for (y,x) in sorted(zip(Y,X))]
@@ -9,12 +11,19 @@ def sort_using(X, Y):
 
 class TickLabels(Text):
 
+<<<<<<< HEAD
     def __init__(self, *args, **kwargs):
         
+=======
+    def __init__(self, frame, *args, **kwargs):
+>>>>>>> upstream/master
         self.clear()
+        self._frame = frame
         super(TickLabels, self).__init__(*args, **kwargs)
         self.set_clip_on(True)
         self.set_visible_axes('all')
+        self._bbox_list = []
+        self.pad = 0.3
 
     def clear(self):
         
@@ -87,6 +96,13 @@ class TickLabels(Text):
         else:
             return [x for x in self._visible_axes if x in self.world]
 
+
+    def get_ticklabels_bbox_list(self):
+        """
+        Returns the bounding box list of all the ticklabels
+        """
+        return self._bbox_list
+
     def draw(self, renderer, bboxes):
         
         self.simplify_labels()
@@ -99,6 +115,7 @@ class TickLabels(Text):
 
                 self.set_text(self.text[axis][i])
 
+<<<<<<< HEAD
                 # TODO: do something smarter for arbitrary directions
                 if np.abs(self.angle[axis][i]) < 45.: 
                     ha = 'right'
@@ -115,17 +132,91 @@ class TickLabels(Text):
                     va = 'bottom'
                     dx = text_size * 0.5
                     dy = - text_size * 0.5
-                else:
-                    ha = 'center'
-                    va = 'bottom'
-                    dx = 0
-                    dy = text_size * 0.2
-
+=======
                 x, y = self.pixel[axis][i]
 
-                self.set_position((x + dx, y + dy))
-                self.set_ha(ha)
-                self.set_va(va)
+                if isinstance(self._frame, RectangularFrame):
+
+                    # This is just to preserve the current results, but can be
+                    # removed next time the reference images are re-generated.
+
+                    if np.abs(self.angle[axis][i]) < 45.:
+                        ha = 'right'
+                        va = 'bottom'
+                        dx = - text_size * 0.5
+                        dy = - text_size * 0.5
+                    elif np.abs(self.angle[axis][i] - 90.) < 45:
+                        ha = 'center'
+                        va = 'bottom'
+                        dx = 0
+                        dy = - text_size * 1.5
+                    elif np.abs(self.angle[axis][i] - 180.) < 45:
+                        ha = 'left'
+                        va = 'bottom'
+                        dx = text_size * 0.5
+                        dy = - text_size * 0.5
+                    else:
+                        ha = 'center'
+                        va = 'bottom'
+                        dx = 0
+                        dy = text_size * 0.2
+
+                    self.set_position((x + dx, y + dy))
+                    self.set_ha(ha)
+                    self.set_va(va)
+
+>>>>>>> upstream/master
+                else:
+
+                    # This is the more general code for arbitrarily oriented
+                    # axes
+
+                    # Set initial position and find bounding box
+                    self.set_position((x, y))
+                    bb = super(TickLabels, self).get_window_extent(renderer)
+
+                    # Find width and height, as well as angle at which we
+                    # transition which side of the label we use to anchor the
+                    # label.
+                    width = bb.width
+                    height = bb.height
+                    theta = np.tan(height / width)
+
+                    # Project axis angle onto bounding box
+                    ax = np.cos(np.radians(self.angle[axis][i]))
+                    ay = np.sin(np.radians(self.angle[axis][i]))
+
+                    # Set anchor point for label
+                    if np.abs(self.angle[axis][i]) < 45.:
+                        dx = width
+                        dy = ay * height
+                    elif np.abs(self.angle[axis][i] - 90.) < 45:
+                        dx = ax * width
+                        dy = height
+                    elif np.abs(self.angle[axis][i] - 180.) < 45:
+                        dx = -width
+                        dy = ay * height
+                    else:
+                        dx = ax * width
+                        dy = -height
+
+                    dx *= 0.5
+                    dy *= 0.5
+
+                    # Find normalized vector along axis normal, so as to be
+                    # able to nudge the label away by a constant padding factor
+
+                    dist = np.hypot(dx, dy)
+
+                    ddx = dx / dist
+                    ddy = dy / dist
+
+                    dx += ddx * text_size * self.pad
+                    dy += ddy * text_size * self.pad
+
+                    self.set_position((x - dx, y - dy))
+                    self.set_ha('center')
+                    self.set_va('center')
 
                 bb = super(TickLabels, self).get_window_extent(renderer)
 <<<<<<< HEAD
@@ -139,3 +230,4 @@ class TickLabels(Text):
                 if bb.count_overlaps(bboxes) == 0:
                     super(TickLabels, self).draw(renderer)
                     bboxes.append(bb)
+                    self._bbox_list.append(bb)
